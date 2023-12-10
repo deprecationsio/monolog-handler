@@ -48,7 +48,7 @@ jobs:
             #
             # PHP and Composer install
             #
-            - name: Install PHP and Composer v1
+            - name: Install PHP and Composer v1 (PHP 5.3)
               if: matrix.php-version == '5.3'
               uses: shivammathur/setup-php@v2
               with:
@@ -56,7 +56,7 @@ jobs:
                   php-version: ${{ matrix.php-version }}
                   tools: composer:v1
 
-            - name: Install PHP and Composer v2
+            - name: Install PHP and Composer v2 (PHP 5.4+)
               if: matrix.php-version != '5.3'
               uses: shivammathur/setup-php@v2
               with:
@@ -67,11 +67,11 @@ jobs:
             #
             # PHPUnit install
             #
-            - name: Install phpunit 4.*
+            - name: Install phpunit 4.* (PHP 5.3 to 7.2)
               if: matrix.php-version < '7.3'
               run: composer require --dev --no-update "phpunit/phpunit=4.*"
 
-            - name: Install phpunit 9.*
+            - name: Install phpunit 9.* (PHP 7.3+)
               if: matrix.php-version >= '7.3'
               run: composer require --dev --no-update "phpunit/phpunit=9.*"
 

@@ -51,10 +51,10 @@ class EventFactory
             $context['url'] = $this->getRequestUrl();
         }
 
-        return [
+        return array(
             'projectDir' => file_exists($composerJson) ? dirname($composerJson) : null,
             'context' => $context,
-        ];
+        );
     }
 
     /**
