@@ -56,6 +56,49 @@ jobs:
                 tools: composer:${{ matrix.composer }}
 
             #
+            # PHPUnit install
+            #
+            - name: Install phpunit 4.*
+              if: matrix.php-version < '7.3'
+              run: composer require --no-update "phpunit/phpunit=4.*"
+
+            - name: Install phpunit 9.*
+              if: matrix.php-version >= '7.3'
+              run: composer require --no-update "phpunit/phpunit=9.*"
+
+            #
+            # Monolog 1
+            #
+            - name: Tests | monolog 1.* | highest
+              run: |
+                  composer require --no-update "monolog/monolog=1.*"
+                  composer update --prefer-dist --no-interaction --no-ansi --no-progress
+                  php vendor/bin/phpunit
+
+            - name: Tests | monolog 1.* | lowest
+              run: |
+                  composer require --no-update "monolog/monolog=1.*"
+                  composer update --prefer-dist --no-interaction --no-ansi --no-progress --prefer-lowest
+                  php vendor/bin/phpunit
+
+            #
+            # Monolog 2
+            #
+            - name: Tests | monolog 2.* | highest
+              if: matrix.php-version >= '7.2'
+              run: |
+                  composer require --no-update "monolog/monolog=2.*"
+                  composer update --prefer-dist --no-interaction --no-ansi --no-progress
+                  php vendor/bin/phpunit
+
+            - name: Tests | monolog 2.* | lowest
+              if: matrix.php-version >= '7.2'
+              run: |
+                  composer require --no-update "monolog/monolog=2.*"
+                  composer update --prefer-dist --no-interaction --no-ansi --no-progress --prefer-lowest
+                  php vendor/bin/phpunit
+
+            #
             # Monolog 3
             #
             - name: Tests | monolog 3.* | highest
