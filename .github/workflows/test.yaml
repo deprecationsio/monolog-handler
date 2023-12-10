@@ -1,0 +1,93 @@
+name: deprecations-io/monolog-handler
+
+on:
+    pull_request: ~
+    push:
+        branches:
+            - 1.x
+
+jobs:
+    coding-style:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.0'
+                  coverage: none
+            - name: php-cs-fixer
+              run: |
+                  wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v3.13.2/php-cs-fixer.phar -q
+                  php php-cs-fixer.phar fix --dry-run --diff
+
+    phpunit:
+        name: PHPUnit (PHP ${{ matrix.php-version }} - Monolog ${{ matrix.monolog-version }})
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                dependencies:
+                    - 'lowest'
+                    - 'highest'
+                composer:
+                    - 'v1'
+                    - 'v2'
+                include:
+                    - php-version: 5.3
+                      monolog-version: 1.*
+                    - php-version: 5.4
+                      monolog-version: 1.*
+                    - php-version: 5.5
+                      monolog-version: 1.*
+                    - php-version: 5.6
+                      monolog-version: 1.*
+                    - php-version: 7.0
+                      monolog-version: 1.*
+                    - php-version: 7.1
+                      monolog-version: 1.*
+                    - php-version: 7.2
+                      monolog-version: 1.*
+                    - php-version: 7.2
+                      monolog-version: 2.*
+                    - php-version: 7.3
+                      monolog-version: 1.*
+                    - php-version: 7.3
+                      monolog-version: 2.*
+                    - php-version: 7.4
+                      monolog-version: 1.*
+                    - php-version: 7.4
+                      monolog-version: 2.*
+                    - php-version: 8.0
+                      monolog-version: 1.*
+                    - php-version: 8.0
+                      monolog-version: 2.*
+                    - php-version: 8.1
+                      monolog-version: 1.*
+                    - php-version: 8.1
+                      monolog-version: 2.*
+                    - php-version: 8.1
+                      monolog-version: 3.*
+                    - php-version: 8.2
+                      monolog-version: 1.*
+                    - php-version: 8.2
+                      monolog-version: 2.*
+                    - php-version: 8.2
+                      monolog-version: 3.*
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Install PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                coverage: none
+                php-version: ${{ matrix.php-version }}
+                tools: composer:${{ matrix.composer }}
+
+            - name: Install Composer dependencies
+              run: |
+                  composer require --no-update "monolog/monolog=${{ matrix.monolog-version }}"
+                  composer update --prefer-dist --no-interaction --no-ansi --no-progress --prefer-${{ matrix.dependencies }}
+
+            - name: Run PHPUnit
+              run: php vendor/bin/simple-phpunit
