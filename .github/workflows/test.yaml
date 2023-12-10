@@ -8,6 +8,7 @@ on:
 
 jobs:
     coding-style:
+        name: php-cs-fixer
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
@@ -21,7 +22,7 @@ jobs:
                   php php-cs-fixer.phar fix --dry-run --diff
 
     phpunit:
-        name: PHPUnit (PHP ${{ matrix.php-version }} - Monolog ${{ matrix.monolog-version }})
+        name: phpunit (PHP ${{ matrix.php-version }} | Composer ${{ matrix.composer }})
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
