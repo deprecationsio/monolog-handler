@@ -34,6 +34,14 @@ class Event
     }
 
     /**
+     * @return string
+     */
+    public function getProjectDir()
+    {
+        return $this->projectDir;
+    }
+
+    /**
      * @return array
      */
     public function toArray()

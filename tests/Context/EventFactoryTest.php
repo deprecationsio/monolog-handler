@@ -16,13 +16,57 @@ use Tests\DeprecationsIo\Monolog\UnitTest;
 
 class EventFactoryTest extends UnitTest
 {
-    public function testCreateEvent()
+    public function provideCreateEvent()
     {
+        return array(
+            array(
+                'sapi' => 'cli',
+                'server' => array(
+                    'argv' => array('bin/console', 'cache:clear'),
+                ),
+                'expectedProjectDir' => dirname(dirname(__DIR__)),
+                'expectedPayload' => array(
+                    'command' => 'bin/console cache:clear',
+                ),
+            ),
+            array(
+                'sapi' => 'fpm',
+                'server' => array(
+                    'REQUEST_URI' => 'https://example.com/path/to/url?query=param#hash',
+                ),
+                'expectedProjectDir' => dirname(dirname(__DIR__)),
+                'expectedPayload' => array(
+                    'method' => 'GET',
+                    'url' => '/path/to/url?query=param',
+                ),
+            ),
+            array(
+                'sapi' => 'fpm',
+                'server' => array(
+                    'REQUEST_METHOD' => 'POST',
+                    'REQUEST_URI' => '/path/to/url?query=param#hash',
+                ),
+                'expectedProjectDir' => dirname(dirname(__DIR__)),
+                'expectedPayload' => array(
+                    'method' => 'POST',
+                    'url' => '/path/to/url?query=param',
+                ),
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider provideCreateEvent
+     */
+    public function testCreateEvent($sapi, $server, $expectedProjectDir, $expectedPayload)
+    {
+        $_SERVER = $server;
+
         $factory = new EventFactory();
+        $event = $factory->createEvent($sapi);
 
-        // Fake CLI command
-        $_SERVER['argv'] = array('bin/console', 'cache:clear');
-
-        $this->assertInstanceOf('DeprecationsIo\Monolog\Context\Event', $factory->createEvent('cli'));
+        $this->assertInstanceOf('DeprecationsIo\Monolog\Context\Event', $event);
+        $this->assertSame($expectedProjectDir, $event->getProjectDir());
+        $this->assertSame($expectedPayload, $event->toArray());
     }
 }

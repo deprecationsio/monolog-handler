@@ -37,22 +37,27 @@ class EventFactory
     private function createContextCache($sapi)
     {
         // Project dir
-        $composerJson = dirname(dirname(dirname(dirname(__DIR__)))).'/composer.json';
-        if (!file_exists($composerJson)) {
-            $composerJson = dirname(dirname(__DIR__)).'/composer.json';
+        if (class_exists('Composer\InstalledVersions')) {
+            // Composer v2
+            $rootPackage = \Composer\InstalledVersions::getRootPackage();
+            $projectDir = realpath($rootPackage['install_path']);
+        } else {
+            // Composer v1
+            $reflection = new \ReflectionClass('Composer\Autoload\ClassLoader');
+            $projectDir = dirname(dirname(dirname($reflection->getFileName())));
         }
 
         // Context
-        $context = [];
+        $context = array();
         if ('cli' === $sapi) {
-            $context['command'] = implode(' ', !empty($_SERVER['argv']) ? $_SERVER['argv'] : []);
+            $context['command'] = implode(' ', !empty($_SERVER['argv']) ? $_SERVER['argv'] : array());
         } else {
             $context['method'] = strtoupper(!empty($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET');
             $context['url'] = $this->getRequestUrl();
         }
 
         return array(
-            'projectDir' => file_exists($composerJson) ? dirname($composerJson) : null,
+            'projectDir' => $projectDir,
             'context' => $context,
         );
     }
@@ -66,7 +71,7 @@ class EventFactory
         if (!empty($_SERVER['IIS_WasUrlRewritten'])
             && 1 === ((int) $_SERVER['IIS_WasUrlRewritten'])
             && !empty($_SERVER['UNENCODED_URL'])) {
-            return (string) $_SERVER['UNENCODED_URL'];
+            return $_SERVER['UNENCODED_URL'];
         }
 
         if (!empty($_SERVER['REQUEST_URI'])) {
