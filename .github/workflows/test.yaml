@@ -24,6 +24,7 @@ jobs:
         name: PHPUnit (PHP ${{ matrix.php-version }} - Monolog ${{ matrix.monolog-version }})
         runs-on: ubuntu-latest
         strategy:
+            fail-fast: false
             matrix:
                 php-version:
                     - '5.3'
@@ -38,47 +39,9 @@ jobs:
                     - '8.0'
                     - '8.1'
                     - '8.2'
-                monolog-version:
-                    - '1.*'
-                    - '2.*'
-                    - '3.*'
                 composer:
                     - 'v1'
                     - 'v2'
-                exclude:
-                    - php-version: '5.3'
-                      monolog-version: '2.*'
-                    - php-version: '5.4'
-                      monolog-version: '2.*'
-                    - php-version: '5.5'
-                      monolog-version: '2.*'
-                    - php-version: '5.6'
-                      monolog-version: '2.*'
-                    - php-version: '7.0'
-                      monolog-version: '2.*'
-                    - php-version: '7.1'
-                      monolog-version: '2.*'
-
-                    - php-version: '5.3'
-                      monolog-version: '3.*'
-                    - php-version: '5.4'
-                      monolog-version: '3.*'
-                    - php-version: '5.5'
-                      monolog-version: '3.*'
-                    - php-version: '5.6'
-                      monolog-version: '3.*'
-                    - php-version: '7.0'
-                      monolog-version: '3.*'
-                    - php-version: '7.1'
-                      monolog-version: '3.*'
-                    - php-version: '7.2'
-                      monolog-version: '3.*'
-                    - php-version: '7.3'
-                      monolog-version: '3.*'
-                    - php-version: '7.4'
-                      monolog-version: '3.*'
-                    - php-version: '8.0'
-                      monolog-version: '3.*'
 
         steps:
             - name: Checkout code
@@ -91,10 +54,19 @@ jobs:
                 php-version: ${{ matrix.php-version }}
                 tools: composer:${{ matrix.composer }}
 
-            - name: Install Composer dependencies
+            #
+            # Monolog 3
+            #
+            - name: Tests | monolog 3.* | highest
+              if: matrix.php-version >= '8.1'
               run: |
-                  composer require --no-update "monolog/monolog=${{ matrix.monolog-version }}"
-                  composer update --prefer-dist --no-interaction --no-ansi --no-progress --prefer-${{ matrix.dependencies }}
+                  composer require --no-update "monolog/monolog=3.*"
+                  composer update --prefer-dist --no-interaction --no-ansi --no-progress
+                  php vendor/bin/phpunit
 
-            - name: Run PHPUnit
-              run: php vendor/bin/simple-phpunit
+            - name: Tests | monolog 3.* | lowest
+              if: matrix.php-version >= '8.1'
+              run: |
+                  composer require --no-update "monolog/monolog=3.*"
+                  composer update --prefer-dist --no-interaction --no-ansi --no-progress --prefer-lowest
+                  php vendor/bin/phpunit
