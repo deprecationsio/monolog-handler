@@ -65,7 +65,7 @@ class Event
      */
     private function normalizeTrace(array $trace)
     {
-        $normalized = [];
+        $normalized = array();
 
         foreach ($trace as $item) {
             $reference = !empty($item['function']) ? $item['function'] : '';
@@ -73,11 +73,11 @@ class Event
                 $reference = $item['class'].'::'.$item['function'];
             }
 
-            $normalized[] = implode("\t", [
+            $normalized[] = implode("\t", array(
                 $this->normalizePath(!empty($item['file']) ? $item['file'] : ''),
                 !empty($item['line']) ? $item['line'] : '',
                 $reference,
-            ]);
+            ));
         }
 
         return implode("\n", $normalized);

@@ -60,7 +60,7 @@ class EventFactoryTest extends UnitTest
      */
     public function testCreateEvent($sapi, $server, $expectedProjectDir, $expectedPayload)
     {
-        $_SERVER = $server;
+        $_SERVER = array_merge($_SERVER, $server);
 
         $factory = new EventFactory();
         $event = $factory->createEvent($sapi);
