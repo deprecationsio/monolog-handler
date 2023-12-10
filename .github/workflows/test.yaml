@@ -22,7 +22,7 @@ jobs:
                   php php-cs-fixer.phar fix --dry-run --diff
 
     phpunit:
-        name: phpunit (PHP ${{ matrix.php-version }} | Composer ${{ matrix.composer }})
+        name: phpunit (PHP ${{ matrix.php-version }})
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
@@ -40,20 +40,29 @@ jobs:
                     - '8.0'
                     - '8.1'
                     - '8.2'
-                composer:
-                    - 'v1'
-                    - 'v2'
 
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
 
-            - name: Install PHP
+            #
+            # PHP and Composer install
+            #
+            - name: Install PHP and Composer v1
+              if: matrix.php-version == '5.3'
+              uses: shivammathur/setup-php@v2
+              with:
+                  coverage: none
+                  php-version: ${{ matrix.php-version }}
+                  tools: composer:v1
+
+            - name: Install PHP and Composer v2
+              if: matrix.php-version != '5.3'
               uses: shivammathur/setup-php@v2
               with:
                 coverage: none
                 php-version: ${{ matrix.php-version }}
-                tools: composer:${{ matrix.composer }}
+                tools: composer:v2
 
             #
             # PHPUnit install
