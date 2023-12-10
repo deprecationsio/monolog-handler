@@ -23,7 +23,7 @@ class EventFactoryTest extends TestCase
         // Fake CLI command
         $_SERVER['argv'] = array('bin/console', 'cache:clear');
 
-        dump($factory->createEvent('cli'));exit;
+        dump($factory->createEvent('cli'));
 
         $this->assertTrue(true);
     }
