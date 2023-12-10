@@ -17,6 +17,7 @@ class EventFactory
 
     /**
      * @param string $sapi
+     *
      * @return Event
      */
     public function createEvent($sapi)
@@ -30,6 +31,7 @@ class EventFactory
 
     /**
      * @param string $sapi
+     *
      * @return array
      */
     private function createContextCache($sapi)
@@ -41,18 +43,18 @@ class EventFactory
         }
 
         // Context
-        $context = array();
-        if ($sapi === 'cli') {
-            $context['command'] = implode(' ', !empty($_SERVER['argv']) ? $_SERVER['argv'] : array());
+        $context = [];
+        if ('cli' === $sapi) {
+            $context['command'] = implode(' ', !empty($_SERVER['argv']) ? $_SERVER['argv'] : []);
         } else {
             $context['method'] = strtoupper(!empty($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET');
             $context['url'] = $this->getRequestUrl();
         }
 
-        return array(
+        return [
             'projectDir' => file_exists($composerJson) ? dirname($composerJson) : null,
             'context' => $context,
-        );
+        ];
     }
 
     /**

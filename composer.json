@@ -23,7 +23,7 @@
         "php": ">=5.3",
         "ext-curl": "*",
         "monolog/monolog": "^1.0|^2.0|^3.0"
-    }
+    },
     "config": {
         "preferred-install": {
             "*": "dist"

@@ -21,7 +21,7 @@ class EventFactoryTest extends UnitTest
         $factory = new EventFactory();
 
         // Fake CLI command
-        $_SERVER['argv'] = array('bin/console', 'cache:clear');
+        $_SERVER['argv'] = ['bin/console', 'cache:clear'];
 
         $this->assertInstanceOf('DeprecationsIo\Monolog\Context\Event', $factory->createEvent('cli'));
     }

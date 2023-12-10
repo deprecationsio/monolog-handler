@@ -25,7 +25,7 @@ class Event
 
     /**
      * @param string $projectDir
-     * @param array $payload
+     * @param array  $payload
      */
     public function __construct($projectDir, $payload)
     {
@@ -44,8 +44,7 @@ class Event
     /**
      * @param string $message
      * @param string $file
-     * @param int $line
-     * @param array $trace
+     * @param int    $line
      *
      * @return void
      */
@@ -54,12 +53,11 @@ class Event
     }
 
     /**
-     * @param array $trace
      * @return string
      */
     private function normalizeTrace(array $trace)
     {
-        $normalized = array();
+        $normalized = [];
 
         foreach ($trace as $item) {
             $reference = !empty($item['function']) ? $item['function'] : '';
@@ -67,11 +65,11 @@ class Event
                 $reference = $item['class'].'::'.$item['function'];
             }
 
-            $normalized[] = implode("\t", array(
+            $normalized[] = implode("\t", [
                 $this->normalizePath(!empty($item['file']) ? $item['file'] : ''),
                 !empty($item['line']) ? $item['line'] : '',
                 $reference,
-            ));
+            ]);
         }
 
         return implode("\n", $normalized);
@@ -79,6 +77,7 @@ class Event
 
     /**
      * @param string $path
+     *
      * @return string
      */
     private function normalizePath($path)
