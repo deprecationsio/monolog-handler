@@ -12,9 +12,9 @@
 namespace Tests\DeprecationsIo\Monolog\Context;
 
 use DeprecationsIo\Monolog\Context\EventFactory;
-use PHPUnit\Framework\TestCase;
+use Tests\DeprecationsIo\Monolog\UnitTest;
 
-class EventFactoryTest extends TestCase
+class EventFactoryTest extends UnitTest
 {
     public function testCreateEvent()
     {
@@ -23,8 +23,6 @@ class EventFactoryTest extends TestCase
         // Fake CLI command
         $_SERVER['argv'] = array('bin/console', 'cache:clear');
 
-        dump($factory->createEvent('cli'));
-
-        $this->assertTrue(true);
+        $this->assertInstanceOf('DeprecationsIo\Monolog\Context\Event', $factory->createEvent('cli'));
     }
 }

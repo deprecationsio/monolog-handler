@@ -60,11 +60,11 @@ jobs:
             #
             - name: Install phpunit 4.*
               if: matrix.php-version < '7.3'
-              run: composer require --no-update "phpunit/phpunit=4.*"
+              run: composer require --dev --no-update "phpunit/phpunit=4.*"
 
             - name: Install phpunit 9.*
               if: matrix.php-version >= '7.3'
-              run: composer require --no-update "phpunit/phpunit=9.*"
+              run: composer require --dev --no-update "phpunit/phpunit=9.*"
 
             #
             # Monolog 1
