@@ -25,53 +25,29 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
+                php-version:
+                    - '5.3'
+                    - '5.4'
+                    - '5.5'
+                    - '5.6'
+                    - '7.0'
+                    - '7.1'
+                    - '7.2'
+                    - '7.3'
+                    - '7.4'
+                    - '8.0'
+                    - '8.1'
+                    - '8.2'
+                monolog-version:
+                    - '1.*'
+                    - '2.*'
+                    - '3.*'
                 dependencies:
                     - 'lowest'
                     - 'highest'
                 composer:
                     - 'v1'
                     - 'v2'
-                include:
-                    - php-version: 5.3
-                      monolog-version: 1.*
-                    - php-version: 5.4
-                      monolog-version: 1.*
-                    - php-version: 5.5
-                      monolog-version: 1.*
-                    - php-version: 5.6
-                      monolog-version: 1.*
-                    - php-version: 7.0
-                      monolog-version: 1.*
-                    - php-version: 7.1
-                      monolog-version: 1.*
-                    - php-version: 7.2
-                      monolog-version: 1.*
-                    - php-version: 7.2
-                      monolog-version: 2.*
-                    - php-version: 7.3
-                      monolog-version: 1.*
-                    - php-version: 7.3
-                      monolog-version: 2.*
-                    - php-version: 7.4
-                      monolog-version: 1.*
-                    - php-version: 7.4
-                      monolog-version: 2.*
-                    - php-version: 8.0
-                      monolog-version: 1.*
-                    - php-version: 8.0
-                      monolog-version: 2.*
-                    - php-version: 8.1
-                      monolog-version: 1.*
-                    - php-version: 8.1
-                      monolog-version: 2.*
-                    - php-version: 8.1
-                      monolog-version: 3.*
-                    - php-version: 8.2
-                      monolog-version: 1.*
-                    - php-version: 8.2
-                      monolog-version: 2.*
-                    - php-version: 8.2
-                      monolog-version: 3.*
 
         steps:
             - name: Checkout code
