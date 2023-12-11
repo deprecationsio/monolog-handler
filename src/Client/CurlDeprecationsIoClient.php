@@ -11,10 +11,26 @@
 
 namespace DeprecationsIo\Monolog\Client;
 
+use DeprecationsIo\Monolog\Context\Event;
+
 class CurlDeprecationsIoClient implements DeprecationsIoClientInterface
 {
-    public function sendEvent($dsn, array $event)
+    public function sendEvent($dsn, Event $event)
     {
-        var_dump($dsn, $event);
+        $content = json_encode($event->toArray());
+
+        $handle = curl_init();
+
+        curl_setopt_array($handle, array(
+            CURLOPT_POST => true,
+            CURLOPT_URL => $dsn,
+            CURLOPT_HTTPHEADER => array('Content-Type: application/json'),
+            CURLOPT_POSTFIELDS => $content,
+            CURLOPT_TIMEOUT_MS => 300,
+            CURLOPT_RETURNTRANSFER => true,
+        ));
+
+        curl_exec($handle);
+        curl_close($handle);
     }
 }
