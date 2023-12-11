@@ -11,26 +11,23 @@
 
 namespace DeprecationsIo\Monolog\Handler;
 
-use DeprecationsIo\Monolog\Client\DeprecationsIoClientInterface;
-use DeprecationsIo\Monolog\Context\EventFactory;
 use Monolog\Handler\HandlerInterface;
 
 /**
  * Handler for Monolog 2.x
  */
-class MonologV2Handler implements HandlerInterface
+class MonologV2Handler extends AbstractMonologHandler implements HandlerInterface
 {
-    private $client;
-    private $dsn;
-    private $eventFactory;
-
-    public function __construct(DeprecationsIoClientInterface $client, $dsn)
+    public function isHandling(array $record): bool
     {
-        $this->client = $client;
-        $this->dsn = $dsn;
+        return $this->isRecordValid($record);
     }
 
-    public function isHandling(array $record): bool
+    /**
+     * @param array $record
+     * @return bool
+     */
+    protected function isRecordValid($record)
     {
         return isset($record['context']['exception']) && $record['context']['exception'] instanceof \Exception;
     }
@@ -44,21 +41,7 @@ class MonologV2Handler implements HandlerInterface
 
     public function handleBatch(array $records): void
     {
-        if (!$this->eventFactory) {
-            $this->eventFactory = new EventFactory();
-        }
-
-        $event = $this->eventFactory->createEvent(PHP_SAPI);
-
-        foreach ($records as $record) {
-            if (!$this->isHandling($record)) {
-                continue;
-            }
-
-            $event->addDeprecation($record['context']['exception']);
-        }
-
-        $this->client->sendEvent($this->dsn, $event);
+        $this->sendEventForRecords($records);
     }
 
     public function close(): void

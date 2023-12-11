@@ -32,7 +32,7 @@ abstract class UnitTest extends TestCase
      */
     protected function getMonologVersion()
     {
-        $composerLock = json_decode(file_get_contents(__DIR__.'/../composer.lock'), true);
+        $composerLock = json_decode(file_get_contents(__DIR__ . '/../composer.lock'), true);
 
         $monologPackage = null;
         foreach ($composerLock['packages'] as $package) {
@@ -42,6 +42,6 @@ abstract class UnitTest extends TestCase
             }
         }
 
-        return (int) $monologPackage['version'][0];
+        return (int)$monologPackage['version'][0];
     }
 }

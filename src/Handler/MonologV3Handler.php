@@ -11,29 +11,29 @@
 
 namespace DeprecationsIo\Monolog\Handler;
 
-use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\HandlerInterface;
+use Monolog\LogRecord;
 
 /**
- * Handler for Monolog 1.x
+ * Handler for Monolog 3.x
  */
-class MonologV1Handler extends AbstractMonologHandler implements HandlerInterface
+class MonologV3Handler extends AbstractMonologHandler implements HandlerInterface
 {
-    public function isHandling(array $record): bool
+    public function isHandling(LogRecord $record): bool
     {
         return $this->isRecordValid($record);
     }
 
     /**
-     * @param array $record
+     * @param LogRecord $record
      * @return bool
      */
     protected function isRecordValid($record)
     {
-        return isset($record['context']['exception']) && $record['context']['exception'] instanceof \Exception;
+        return isset($record->context['exception']) && $record->context['exception'] instanceof \Exception;
     }
 
-    public function handle(array $record): bool
+    public function handle(LogRecord $record): bool
     {
         $this->handleBatch(array($record));
 
@@ -45,22 +45,7 @@ class MonologV1Handler extends AbstractMonologHandler implements HandlerInterfac
         $this->sendEventForRecords($records);
     }
 
-    public function pushProcessor($callback)
-    {
-        // no-op (unused by deprecations.io)
-    }
-
-    public function popProcessor()
-    {
-        // no-op (unused by deprecations.io)
-    }
-
-    public function setFormatter(FormatterInterface $formatter)
-    {
-        // no-op (unused by deprecations.io)
-    }
-
-    public function getFormatter()
+    public function close(): void
     {
         // no-op (unused by deprecations.io)
     }
