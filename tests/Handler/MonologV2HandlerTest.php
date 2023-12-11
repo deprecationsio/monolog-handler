@@ -12,6 +12,7 @@
 namespace Tests\DeprecationsIo\Monolog\Handler;
 
 use DeprecationsIo\Monolog\Handler\MonologV2Handler;
+use Monolog\Logger;
 use Tests\DeprecationsIo\Monolog\Client\MockDeprecationsIoClient;
 use Tests\DeprecationsIo\Monolog\UnitTest;
 
@@ -24,7 +25,6 @@ class MonologV2HandlerTest extends UnitTest
         }
 
         $client = new MockDeprecationsIoClient();
-
         $handler = new MonologV2Handler($client, 'https://ingest.deprecations.io/example?apikey=test');
 
         $this->assertTrue($handler->isHandling(array(
@@ -33,10 +33,9 @@ class MonologV2HandlerTest extends UnitTest
             ),
         )));
 
-        $handler->handle(array(
-            'context' => array(
-                'exception' => $this->createDeprecationException(),
-            ),
+        $logger = new Logger('app', array($handler));
+        $logger->notice('message', array(
+            'exception' => $this->createDeprecationException(),
         ));
 
         $this->assertSame(

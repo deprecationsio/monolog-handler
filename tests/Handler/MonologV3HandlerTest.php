@@ -13,6 +13,7 @@ namespace Handler;
 
 use DeprecationsIo\Monolog\Handler\MonologV3Handler;
 use Monolog\Level;
+use Monolog\Logger;
 use Monolog\LogRecord;
 use Tests\DeprecationsIo\Monolog\Client\MockDeprecationsIoClient;
 use Tests\DeprecationsIo\Monolog\UnitTest;
@@ -26,7 +27,6 @@ class MonologV3HandlerTest extends UnitTest
         }
 
         $client = new MockDeprecationsIoClient();
-
         $handler = new MonologV3Handler($client, 'https://ingest.deprecations.io/example?apikey=test');
 
         $this->assertTrue($handler->isHandling(new LogRecord(
@@ -39,14 +39,9 @@ class MonologV3HandlerTest extends UnitTest
             )
         )));
 
-        $handler->handle(new LogRecord(
-            new \DateTimeImmutable(),
-            'app',
-            Level::Notice,
-            'message',
-            array(
-                'exception' => $this->createDeprecationException(),
-            )
+        $logger = new Logger('app', array($handler));
+        $logger->notice('message', array(
+            'exception' => $this->createDeprecationException(),
         ));
 
         $this->assertSame(
