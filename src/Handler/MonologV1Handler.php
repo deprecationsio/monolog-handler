@@ -19,7 +19,7 @@ use Monolog\Handler\HandlerInterface;
  */
 class MonologV1Handler extends AbstractMonologHandler implements HandlerInterface
 {
-    public function isHandling(array $record): bool
+    public function isHandling(array $record)
     {
         return $this->isRecordValid($record);
     }
@@ -33,14 +33,14 @@ class MonologV1Handler extends AbstractMonologHandler implements HandlerInterfac
         return isset($record['context']['exception']) && $record['context']['exception'] instanceof \Exception;
     }
 
-    public function handle(array $record): bool
+    public function handle(array $record)
     {
         $this->handleBatch(array($record));
 
         return false;
     }
 
-    public function handleBatch(array $records): void
+    public function handleBatch(array $records)
     {
         $this->sendEventForRecords($records);
     }
