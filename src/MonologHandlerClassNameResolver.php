@@ -46,7 +46,7 @@ class MonologHandlerClassNameResolver
 
         foreach ($composerLock['packages'] as $package) {
             if ($package['name'] === 'monolog/monolog') {
-                return (int) $package['version'][0];
+                return sprintf('DeprecationsIo\Monolog\Handler\MonologV%sHandler', $package['version'][0]);
             }
         }
 
