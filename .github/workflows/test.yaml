@@ -66,13 +66,13 @@ jobs:
             #
             - name: Tests | monolog 1.* | highest
               run: |
-                  composer require --no-update "monolog/monolog=1.*"
+                  composer require --no-update "monolog/monolog=^1.11"
                   composer update --prefer-dist --no-interaction --no-ansi --no-progress
                   php vendor/bin/phpunit
 
             - name: Tests | monolog 1.* | lowest
               run: |
-                  composer require --no-update "monolog/monolog=1.*"
+                  composer require --no-update "monolog/monolog=^1.11"
                   composer update --prefer-dist --no-interaction --no-ansi --no-progress --prefer-lowest
                   php vendor/bin/phpunit
 

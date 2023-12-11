@@ -26,4 +26,22 @@ abstract class UnitTest extends TestCase
     {
         return new \Exception('User Deprecated: Method \"Symfony\\Component\\HttpKernel\\Bundle\\Bundle::build()\" might add \"void\" as a native return type declaration in the future.');
     }
+
+    /**
+     * @return int
+     */
+    protected function getMonologVersion()
+    {
+        $composerLock = json_decode(file_get_contents(__DIR__.'/../composer.lock'), true);
+
+        $monologPackage = null;
+        foreach ($composerLock['packages'] as $package) {
+            if ($package['name'] === 'monolog/monolog') {
+                $monologPackage = $package;
+                break;
+            }
+        }
+
+        return (int) $monologPackage['version'][0];
+    }
 }
