@@ -25,7 +25,7 @@ class Event
 
     /**
      * @param string $projectDir
-     * @param array  $payload
+     * @param array $payload
      */
     public function __construct($projectDir, $payload)
     {
@@ -50,37 +50,16 @@ class Event
     }
 
     /**
-     * @param string $message
-     * @param string $file
-     * @param int    $line
-     *
      * @return void
      */
-    public function addDeprecation($message, $file, $line, array $trace)
+    public function addDeprecation(\Exception $exception)
     {
-    }
-
-    /**
-     * @return string
-     */
-    private function normalizeTrace(array $trace)
-    {
-        $normalized = array();
-
-        foreach ($trace as $item) {
-            $reference = !empty($item['function']) ? $item['function'] : '';
-            if (!empty($item['class']) && !empty($item['function'])) {
-                $reference = $item['class'].'::'.$item['function'];
-            }
-
-            $normalized[] = implode("\t", array(
-                $this->normalizePath(!empty($item['file']) ? $item['file'] : ''),
-                !empty($item['line']) ? $item['line'] : '',
-                $reference,
-            ));
-        }
-
-        return implode("\n", $normalized);
+        $this->payload['deprecations'][] = array(
+            'message' => $exception->getMessage(),
+            'file' => $this->normalizePath($exception->getFile()),
+            'line' => $exception->getLine(),
+            'trace' => $this->normalizeTrace($exception->getTrace()),
+        );
     }
 
     /**
@@ -95,5 +74,28 @@ class Event
         }
 
         return ltrim($path, '/\\');
+    }
+
+    /**
+     * @return string
+     */
+    private function normalizeTrace(array $trace)
+    {
+        $normalized = array();
+
+        foreach ($trace as $item) {
+            $reference = !empty($item['function']) ? $item['function'] : '';
+            if (!empty($item['class']) && !empty($item['function'])) {
+                $reference = $item['class'] . '::' . $item['function'];
+            }
+
+            $normalized[] = implode("\t", array(
+                $this->normalizePath(!empty($item['file']) ? $item['file'] : ''),
+                !empty($item['line']) ? $item['line'] : '',
+                $reference,
+            ));
+        }
+
+        return implode("\n", $normalized);
     }
 }

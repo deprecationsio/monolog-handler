@@ -69,4 +69,30 @@ class EventFactoryTest extends UnitTest
         $this->assertSame($expectedProjectDir, $event->getProjectDir());
         $this->assertSame($expectedPayload, $event->toArray());
     }
+
+    public function testAddDeprecation()
+    {
+        $_SERVER = array_merge($_SERVER, array(
+            'argv' => array('bin/console', 'cache:clear'),
+        ));
+
+        $factory = new EventFactory();
+
+        $event = $factory->createEvent('cli');
+        $this->assertInstanceOf('DeprecationsIo\Monolog\Context\Event', $event);
+
+        $event->addDeprecation($this->createDeprecationException());
+
+        $details = $event->toArray();
+        $this->assertSame('bin/console cache:clear', $details['command']);
+        $this->assertSame(
+            'User Deprecated: Method \\"Symfony\\Component\\HttpKernel\\Bundle\\Bundle::build()\\" might add \\"void\\" as a native return type declaration in the future.',
+            $details['deprecations'][0]['message']
+        );
+        $this->assertSame('tests/UnitTest.php', $details['deprecations'][0]['file']);
+        $this->assertSame(27, $details['deprecations'][0]['line']);
+
+        $traceLines = explode("\n", $details['deprecations'][0]['trace']);
+        $this->assertSame('tests/Context/EventFactoryTest.php	84	Tests\\DeprecationsIo\\Monolog\\UnitTest::createDeprecationException', $traceLines[0]);
+    }
 }

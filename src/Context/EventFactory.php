@@ -69,7 +69,7 @@ class EventFactory
     {
         // IIS rewritten URL
         if (!empty($_SERVER['IIS_WasUrlRewritten'])
-            && 1 === ((int) $_SERVER['IIS_WasUrlRewritten'])
+            && 1 === ((int)$_SERVER['IIS_WasUrlRewritten'])
             && !empty($_SERVER['UNENCODED_URL'])) {
             return $_SERVER['UNENCODED_URL'];
         }
@@ -92,11 +92,11 @@ class EventFactory
                 }
 
                 if (isset($uriComponents['query'])) {
-                    $requestUri .= '?'.$uriComponents['query'];
+                    $requestUri .= '?' . $uriComponents['query'];
                 }
             }
 
-            return (string) $requestUri;
+            return (string)$requestUri;
         }
 
         // IIS 5.0, PHP as CGI
@@ -104,10 +104,10 @@ class EventFactory
             $requestUri = $_SERVER['ORIG_PATH_INFO'];
 
             if (!empty($_SERVER['QUERY_STRING'])) {
-                $requestUri .= '?'.$_SERVER['QUERY_STRING'];
+                $requestUri .= '?' . $_SERVER['QUERY_STRING'];
             }
 
-            return (string) $requestUri;
+            return (string)$requestUri;
         }
 
         return '';
