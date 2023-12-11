@@ -42,6 +42,6 @@ abstract class UnitTest extends TestCase
             }
         }
 
-        return (int)$monologPackage['version'][0];
+        return (int) $monologPackage['version'][0];
     }
 }
