@@ -1,6 +1,6 @@
 {
     "name": "deprecations-io/monolog-handler",
-    "description": "Monolog handler integrating deprecations.io with Monolog 2+",
+    "description": "Monolog handler integrating deprecations.io with Monolog",
     "type": "library",
     "license": "MIT",
     "authors": [
