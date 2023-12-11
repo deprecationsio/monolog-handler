@@ -18,11 +18,6 @@ use Monolog\Handler\HandlerInterface;
  */
 class MonologV2Handler extends AbstractMonologHandler implements HandlerInterface
 {
-    public function isHandling(array $record): bool
-    {
-        return $this->isRecordValid($record);
-    }
-
     /**
      * @param array $record
      * @return bool
@@ -42,6 +37,12 @@ class MonologV2Handler extends AbstractMonologHandler implements HandlerInterfac
     public function handleBatch(array $records): void
     {
         $this->sendEventForRecords($records);
+    }
+
+    public function isHandling(array $record): bool
+    {
+        // Always true to receive all records and accept them during handling
+        return true;
     }
 
     public function close(): void

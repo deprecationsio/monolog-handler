@@ -19,11 +19,6 @@ use Monolog\LogRecord;
  */
 class MonologV3Handler extends AbstractMonologHandler implements HandlerInterface
 {
-    public function isHandling(LogRecord $record): bool
-    {
-        return $this->isRecordValid($record);
-    }
-
     /**
      * @param LogRecord $record
      * @return bool
@@ -48,5 +43,11 @@ class MonologV3Handler extends AbstractMonologHandler implements HandlerInterfac
     public function close(): void
     {
         // no-op (unused by deprecations.io)
+    }
+
+    public function isHandling(LogRecord $record): bool
+    {
+        // Always true to receive all records and accept them during handling
+        return true;
     }
 }
