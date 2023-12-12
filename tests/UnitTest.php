@@ -20,11 +20,11 @@ use PHPUnit\Framework\TestCase;
 abstract class UnitTest extends TestCase
 {
     /**
-     * @return \Exception
+     * @return \ErrorException
      */
     protected function createDeprecationException()
     {
-        return new \Exception('User Deprecated: Method \"Symfony\\Component\\HttpKernel\\Bundle\\Bundle::build()\" might add \"void\" as a native return type declaration in the future.');
+        return new \ErrorException('User Deprecated: deprecation example.', 1, E_USER_DEPRECATED);
     }
 
     /**
@@ -42,6 +42,6 @@ abstract class UnitTest extends TestCase
             }
         }
 
-        return (int) $monologPackage['version'][0];
+        return (int)$monologPackage['version'][0];
     }
 }

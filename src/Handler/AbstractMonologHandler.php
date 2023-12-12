@@ -29,12 +29,6 @@ abstract class AbstractMonologHandler
     }
 
     /**
-     * @param mixed $record
-     * @return bool
-     */
-    abstract protected function shouldLog($record);
-
-    /**
      * @param int $level
      * @param string $message
      * @param array $context
@@ -59,7 +53,7 @@ abstract class AbstractMonologHandler
         }
 
         // Generic
-        return false !== strpos($message, 'deprecated');
+        return false !== stripos($message, 'deprecated');
     }
 
     protected function sendEventForRecords(array $records)
@@ -80,6 +74,12 @@ abstract class AbstractMonologHandler
             $this->client->sendEvent($this->dsn, $event);
         }
     }
+
+    /**
+     * @param mixed $record
+     * @return bool
+     */
+    abstract protected function shouldLog($record);
 
     private function addRecordToEvent(Event $event, $record)
     {

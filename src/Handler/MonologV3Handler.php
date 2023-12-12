@@ -19,15 +19,6 @@ use Monolog\LogRecord;
  */
 class MonologV3Handler extends AbstractMonologHandler implements HandlerInterface
 {
-    /**
-     * @param LogRecord $record
-     * @return bool
-     */
-    protected function shouldLog($record)
-    {
-        return $this->isDeprecationRecord($record->level->value, $record->message, $record->context);
-    }
-
     public function handle(LogRecord $record): bool
     {
         $this->handleBatch(array($record));
@@ -49,5 +40,14 @@ class MonologV3Handler extends AbstractMonologHandler implements HandlerInterfac
     {
         // Always true to receive all records and accept them during handling
         return true;
+    }
+
+    /**
+     * @param LogRecord $record
+     * @return bool
+     */
+    protected function shouldLog($record)
+    {
+        return $this->isDeprecationRecord($record->level->value, $record->message, $record->context);
     }
 }

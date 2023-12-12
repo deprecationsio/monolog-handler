@@ -92,7 +92,7 @@ class EventFactoryTest extends UnitTest
         $details = $event->toArray();
         $this->assertSame('bin/console cache:clear', $details['command']);
         $this->assertSame(
-            'User Deprecated: Method \\"Symfony\\Component\\HttpKernel\\Bundle\\Bundle::build()\\" might add \\"void\\" as a native return type declaration in the future.',
+            'User Deprecated: deprecation example.',
             $details['deprecations'][0]['message']
         );
         $this->assertSame('tests/UnitTest.php', $details['deprecations'][0]['file']);

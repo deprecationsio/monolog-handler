@@ -19,15 +19,6 @@ use Monolog\Handler\HandlerInterface;
  */
 class MonologV1Handler extends AbstractMonologHandler implements HandlerInterface
 {
-    /**
-     * @param array $record
-     * @return bool
-     */
-    protected function shouldLog($record)
-    {
-        return $this->isDeprecationRecord($record['level'], $record['message'], $record['context']);
-    }
-
     public function handle(array $record)
     {
         $this->handleBatch(array($record));
@@ -64,5 +55,14 @@ class MonologV1Handler extends AbstractMonologHandler implements HandlerInterfac
     public function getFormatter()
     {
         // no-op (unused by deprecations.io)
+    }
+
+    /**
+     * @param array $record
+     * @return bool
+     */
+    protected function shouldLog($record)
+    {
+        return $this->isDeprecationRecord($record['level'], $record['message'], $record['context']);
     }
 }

@@ -36,7 +36,7 @@ class MonologHandlerClassNameResolver
         // Composer v1
         $reflection = new \ReflectionClass('Composer\Autoload\ClassLoader');
 
-        $composerLockPath = dirname(dirname(dirname($reflection->getFileName()))).'/composer.lock';
+        $composerLockPath = dirname(dirname(dirname($reflection->getFileName()))) . '/composer.lock';
         if (!file_exists($composerLockPath)) {
             // Monolog is not installed
             return null;

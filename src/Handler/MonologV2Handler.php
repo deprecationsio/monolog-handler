@@ -18,15 +18,6 @@ use Monolog\Handler\HandlerInterface;
  */
 class MonologV2Handler extends AbstractMonologHandler implements HandlerInterface
 {
-    /**
-     * @param array $record
-     * @return bool
-     */
-    protected function shouldLog($record)
-    {
-        return $this->isDeprecationRecord($record['level'], $record['message'], $record['context']);
-    }
-
     public function handle(array $record): bool
     {
         $this->handleBatch(array($record));
@@ -48,5 +39,14 @@ class MonologV2Handler extends AbstractMonologHandler implements HandlerInterfac
     public function close(): void
     {
         // no-op (unused by deprecations.io)
+    }
+
+    /**
+     * @param array $record
+     * @return bool
+     */
+    protected function shouldLog($record)
+    {
+        return $this->isDeprecationRecord($record['level'], $record['message'], $record['context']);
     }
 }

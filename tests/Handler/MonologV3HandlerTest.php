@@ -9,18 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Handler;
+namespace Tests\DeprecationsIo\Monolog\Handler;
 
 use DeprecationsIo\Monolog\Handler\MonologV3Handler;
-use Monolog\Level;
 use Monolog\Logger;
-use Monolog\LogRecord;
 use Tests\DeprecationsIo\Monolog\Client\MockDeprecationsIoClient;
 use Tests\DeprecationsIo\Monolog\UnitTest;
 
 class MonologV3HandlerTest extends UnitTest
 {
-    public function testHandle()
+    public function testHandleTypeKey()
     {
         if (3 !== $this->getMonologVersion()) {
             $this->markTestSkipped('Monolog v3 not installed.');
@@ -29,15 +27,59 @@ class MonologV3HandlerTest extends UnitTest
         $client = new MockDeprecationsIoClient();
         $handler = new MonologV3Handler('https://ingest.deprecations.io/example?apikey=test', $client);
 
-        $this->assertTrue($handler->isHandling(new LogRecord(
-            new \DateTimeImmutable(),
-            'app',
-            Level::Notice,
-            'message',
-            array(
-                'exception' => $this->createDeprecationException(),
-            )
-        )));
+        $logger = new Logger('app', array($handler));
+        $logger->notice('User Deprecated: deprecation example.', array(
+            'type' => E_USER_DEPRECATED,
+        ));
+
+        $this->assertSame(
+            'https://ingest.deprecations.io/example?apikey=test',
+            $client->events[0]['dsn']
+        );
+
+        $this->assertSame(
+            'User Deprecated: deprecation example.',
+            $client->events[0]['event']['deprecations'][0]['message']
+        );
+    }
+
+    public function testHandleCodeKey()
+    {
+        if (3 !== $this->getMonologVersion()) {
+            $this->markTestSkipped('Monolog v3 not installed.');
+        }
+
+        $client = new MockDeprecationsIoClient();
+        $handler = new MonologV3Handler('https://ingest.deprecations.io/example?apikey=test', $client);
+
+        $logger = new Logger('app', array($handler));
+        $logger->notice('User Deprecated: deprecation example.', array(
+            'code' => E_DEPRECATED,
+        ));
+
+        $this->assertSame(
+            'https://ingest.deprecations.io/example?apikey=test',
+            $client->events[0]['dsn']
+        );
+
+        $this->assertSame(
+            'User Deprecated: deprecation example.',
+            $client->events[0]['event']['deprecations'][0]['message']
+        );
+    }
+
+    public function testHandleExceptionKey()
+    {
+        if (3 !== $this->getMonologVersion()) {
+            $this->markTestSkipped('Monolog v3 not installed.');
+        }
+
+        if (!class_exists('ErrorException')) {
+            $this->markTestSkipped('Class ErrorException does not exists');
+        }
+
+        $client = new MockDeprecationsIoClient();
+        $handler = new MonologV3Handler('https://ingest.deprecations.io/example?apikey=test', $client);
 
         $logger = new Logger('app', array($handler));
         $logger->notice('message', array(
@@ -50,7 +92,7 @@ class MonologV3HandlerTest extends UnitTest
         );
 
         $this->assertSame(
-            'User Deprecated: Method \\"Symfony\\Component\\HttpKernel\\Bundle\\Bundle::build()\\" might add \\"void\\" as a native return type declaration in the future.',
+            'User Deprecated: deprecation example.',
             $client->events[0]['event']['deprecations'][0]['message']
         );
     }
