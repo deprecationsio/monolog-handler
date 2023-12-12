@@ -42,12 +42,19 @@ abstract class AbstractMonologHandler
      */
     protected function isDeprecationRecord($level, $message, array $context)
     {
-        // Symfony 2.8
+        // Symfony 2.8-3.4
         if (isset($context['type']) && ($context['type'] === E_USER_DEPRECATED || $context['type'] === E_DEPRECATED)) {
             return true;
         }
 
         if (isset($context['code']) && ($context['code'] === E_USER_DEPRECATED || $context['code'] === E_DEPRECATED)) {
+            return true;
+        }
+
+        // Symfony 4.0+
+        if (!empty($context['exception'])
+            && $context['exception'] instanceof \ErrorException
+            && ($context['exception']->getSeverity() === E_USER_DEPRECATED || $context['exception']->getSeverity() === E_DEPRECATED)) {
             return true;
         }
 
