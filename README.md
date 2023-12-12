@@ -32,13 +32,13 @@ use Monolog\Logger;
 
 $logger = new Logger('app', [
     // Monolog 1
-    new MonologV1Handler(new CurlDeprecationsIoClient(), '<your-deprecations.io-endpoint>'),
+    new MonologV1Handler('<your-deprecations.io-endpoint>'),
     
     // Monolog 2
-    new MonologV2Handler(new CurlDeprecationsIoClient(), '<your-deprecations.io-endpoint>'),
+    new MonologV2Handler('<your-deprecations.io-endpoint>'),
     
     // Monolog 3
-    new MonologV3Handler(new CurlDeprecationsIoClient(), '<your-deprecations.io-endpoint>'),
+    new MonologV3Handler('<your-deprecations.io-endpoint>'),
 ]);
 
 // Log a deprecation
@@ -58,6 +58,6 @@ use DeprecationsIo\Monolog\MonologHandlerClassNameResolver;
 $handlerName = MonologHandlerClassNameResolver::resolveHandlerClassName();
 
 $logger = new Logger('app', [
-    new $handlerName(new CurlDeprecationsIoClient(), '<your-deprecations.io-endpoint>'),
+    new $handlerName('<your-deprecations.io-endpoint>'),
 ]);
 ```
