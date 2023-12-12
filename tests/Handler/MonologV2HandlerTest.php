@@ -25,7 +25,7 @@ class MonologV2HandlerTest extends UnitTest
         }
 
         $client = new MockDeprecationsIoClient();
-        $handler = new MonologV2Handler($client, 'https://ingest.deprecations.io/example?apikey=test');
+        $handler = new MonologV2Handler('https://ingest.deprecations.io/example?apikey=test', $client);
 
         $this->assertTrue($handler->isHandling(array(
             'context' => array(

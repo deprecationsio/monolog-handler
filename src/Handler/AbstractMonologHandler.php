@@ -11,6 +11,7 @@
 
 namespace DeprecationsIo\Monolog\Handler;
 
+use DeprecationsIo\Monolog\Client\CurlDeprecationsIoClient;
 use DeprecationsIo\Monolog\Client\DeprecationsIoClientInterface;
 use DeprecationsIo\Monolog\Context\EventFactory;
 
@@ -20,10 +21,10 @@ abstract class AbstractMonologHandler
     private $dsn;
     private $eventFactory;
 
-    public function __construct(DeprecationsIoClientInterface $client, $dsn)
+    public function __construct($dsn, DeprecationsIoClientInterface $client = null)
     {
-        $this->client = $client;
         $this->dsn = $dsn;
+        $this->client = $client ?: new CurlDeprecationsIoClient();
     }
 
     protected function sendEventForRecords(array $records)

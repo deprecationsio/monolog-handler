@@ -27,7 +27,7 @@ class MonologV3HandlerTest extends UnitTest
         }
 
         $client = new MockDeprecationsIoClient();
-        $handler = new MonologV3Handler($client, 'https://ingest.deprecations.io/example?apikey=test');
+        $handler = new MonologV3Handler('https://ingest.deprecations.io/example?apikey=test', $client);
 
         $this->assertTrue($handler->isHandling(new LogRecord(
             new \DateTimeImmutable(),

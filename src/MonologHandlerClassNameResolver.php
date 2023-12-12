@@ -24,7 +24,7 @@ class MonologHandlerClassNameResolver
         // Composer v2
         if (class_exists('Composer\InstalledVersions')) {
             try {
-                $version = \Composer\InstalledVersions::getPrettyVersion('monolog/monolog');
+                $version = \Composer\InstalledVersions::getVersion('monolog/monolog');
 
                 return sprintf('DeprecationsIo\Monolog\Handler\MonologV%sHandler', $version[0]);
             } catch (\OutOfBoundsException $e) {
