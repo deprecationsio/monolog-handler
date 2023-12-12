@@ -50,15 +50,27 @@ class Event
     }
 
     /**
+     * @return bool
+     */
+    public function hasDeprecations()
+    {
+        return !empty($this->payload['deprecations']);
+    }
+
+    /**
+     * @param string $message
+     * @param string $file
+     * @param int $line
+     * @param array $trace
      * @return void
      */
-    public function addDeprecation(\Exception $exception)
+    public function addDeprecation($message, $file, $line, $trace)
     {
         $this->payload['deprecations'][] = array(
-            'message' => $exception->getMessage(),
-            'file' => $this->normalizePath($exception->getFile()),
-            'line' => $exception->getLine(),
-            'trace' => $this->normalizeTrace($exception->getTrace()),
+            'message' => $message,
+            'file' => $file ? $this->normalizePath($file) : null,
+            'line' => $line,
+            'trace' => $trace ? $this->normalizeTrace($trace) : array(),
         );
     }
 

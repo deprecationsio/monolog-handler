@@ -22,9 +22,9 @@ class MonologV2Handler extends AbstractMonologHandler implements HandlerInterfac
      * @param array $record
      * @return bool
      */
-    protected function isRecordValid($record)
+    protected function shouldLog($record)
     {
-        return isset($record['context']['exception']) && $record['context']['exception'] instanceof \Exception;
+        return $this->isDeprecationRecord($record['level'], $record['message'], $record['context']);
     }
 
     public function handle(array $record): bool

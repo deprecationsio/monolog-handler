@@ -13,6 +13,7 @@ namespace DeprecationsIo\Monolog\Handler;
 
 use DeprecationsIo\Monolog\Client\CurlDeprecationsIoClient;
 use DeprecationsIo\Monolog\Client\DeprecationsIoClientInterface;
+use DeprecationsIo\Monolog\Context\Event;
 use DeprecationsIo\Monolog\Context\EventFactory;
 
 abstract class AbstractMonologHandler
@@ -27,6 +28,33 @@ abstract class AbstractMonologHandler
         $this->client = $client ?: new CurlDeprecationsIoClient();
     }
 
+    /**
+     * @param mixed $record
+     * @return bool
+     */
+    abstract protected function shouldLog($record);
+
+    /**
+     * @param int $level
+     * @param string $message
+     * @param array $context
+     * @return bool
+     */
+    protected function isDeprecationRecord($level, $message, array $context)
+    {
+        // Symfony 2.8
+        if (isset($context['type']) && ($context['type'] === E_USER_DEPRECATED || $context['type'] === E_DEPRECATED)) {
+            return true;
+        }
+
+        if (isset($context['code']) && ($context['code'] === E_USER_DEPRECATED || $context['code'] === E_DEPRECATED)) {
+            return true;
+        }
+
+        // Generic
+        return false !== strpos($message, 'deprecated');
+    }
+
     protected function sendEventForRecords(array $records)
     {
         if (!$this->eventFactory) {
@@ -36,19 +64,41 @@ abstract class AbstractMonologHandler
         $event = $this->eventFactory->createEvent(PHP_SAPI);
 
         foreach ($records as $record) {
-            if (!$this->isRecordValid($record)) {
-                continue;
+            if ($this->shouldLog($record)) {
+                $this->addRecordToEvent($event, $record);
             }
-
-            $event->addDeprecation($record['context']['exception']);
         }
 
-        $this->client->sendEvent($this->dsn, $event);
+        if ($event->hasDeprecations()) {
+            $this->client->sendEvent($this->dsn, $event);
+        }
     }
 
-    /**
-     * @param mixed $record
-     * @return bool
-     */
-    abstract protected function isRecordValid($record);
+    private function addRecordToEvent(Event $event, $record)
+    {
+        if (isset($record['context']['exception']) && $record['context']['exception'] instanceof \Exception) {
+            $event->addDeprecation(
+                $record['context']['exception']->getMessage(),
+                $record['context']['exception']->getFile(),
+                $record['context']['exception']->getLine(),
+                $record['context']['exception']->getTrace()
+            );
+
+            return;
+        }
+
+        $trace = array();
+        if (!empty($record['context']['stack'])) {
+            $trace = $record['context']['stack'];
+        } elseif (!empty($record['context']['trace'])) {
+            $trace = $record['context']['trace'];
+        }
+
+        $event->addDeprecation(
+            $record['message'],
+            !empty($record['context']['file']) ? $record['context']['file'] : null,
+            !empty($record['context']['line']) ? $record['context']['line'] : null,
+            $trace
+        );
+    }
 }

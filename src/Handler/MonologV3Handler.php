@@ -23,9 +23,9 @@ class MonologV3Handler extends AbstractMonologHandler implements HandlerInterfac
      * @param LogRecord $record
      * @return bool
      */
-    protected function isRecordValid($record)
+    protected function shouldLog($record)
     {
-        return isset($record->context['exception']) && $record->context['exception'] instanceof \Exception;
+        return $this->isDeprecationRecord($record->level->value, $record->message, $record->context);
     }
 
     public function handle(LogRecord $record): bool

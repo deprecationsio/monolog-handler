@@ -81,7 +81,13 @@ class EventFactoryTest extends UnitTest
         $event = $factory->createEvent('cli');
         $this->assertInstanceOf('DeprecationsIo\Monolog\Context\Event', $event);
 
-        $event->addDeprecation($this->createDeprecationException());
+        $exception = $this->createDeprecationException();
+        $event->addDeprecation(
+            $exception->getMessage(),
+            $exception->getFile(),
+            $exception->getLine(),
+            $exception->getTrace()
+        );
 
         $details = $event->toArray();
         $this->assertSame('bin/console cache:clear', $details['command']);
