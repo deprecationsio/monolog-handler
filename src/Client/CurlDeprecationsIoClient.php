@@ -26,7 +26,7 @@ class CurlDeprecationsIoClient implements DeprecationsIoClientInterface
             CURLOPT_URL => $dsn,
             CURLOPT_HTTPHEADER => array('Content-Type: application/json'),
             CURLOPT_POSTFIELDS => $content,
-            CURLOPT_TIMEOUT_MS => 300,
+            CURLOPT_TIMEOUT_MS => 1000,
             CURLOPT_RETURNTRANSFER => true,
         ));
 
