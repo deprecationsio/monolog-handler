@@ -11,10 +11,10 @@
 
 namespace Tests\Deprecationsio\Monolog\Client;
 
-use Deprecationsio\Monolog\Client\DeprecationsIoClientInterface;
+use Deprecationsio\Monolog\Client\DeprecationsioClientInterface;
 use Deprecationsio\Monolog\Context\Event;
 
-class MockDeprecationsioClient implements DeprecationsIoClientInterface
+class MockDeprecationsioClient implements DeprecationsioClientInterface
 {
     public $events;
 

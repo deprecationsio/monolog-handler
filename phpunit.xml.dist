@@ -11,7 +11,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="DeprecationsIo Monolog Test Suite">
+        <testsuite name="Deprecationsio Monolog Test Suite">
             <directory>tests/</directory>
         </testsuite>
     </testsuites>
