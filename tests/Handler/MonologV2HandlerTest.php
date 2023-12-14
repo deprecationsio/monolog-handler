@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\DeprecationsIo\Monolog\Handler;
+namespace Tests\Deprecationsio\Monolog\Handler;
 
-use DeprecationsIo\Monolog\Handler\MonologV2Handler;
+use Deprecationsio\Monolog\Handler\MonologV2Handler;
 use Monolog\Logger;
-use Tests\DeprecationsIo\Monolog\Client\MockDeprecationsIoClient;
-use Tests\DeprecationsIo\Monolog\UnitTest;
+use Tests\Deprecationsio\Monolog\Client\MockDeprecationsIoClient;
+use Tests\Deprecationsio\Monolog\UnitTest;
 
 class MonologV2HandlerTest extends UnitTest
 {

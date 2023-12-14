@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace DeprecationsIo\Monolog\Client;
+namespace Deprecationsio\Monolog\Client;
 
-use DeprecationsIo\Monolog\Context\Event;
+use Deprecationsio\Monolog\Context\Event;
 
-interface DeprecationsIoClientInterface
+interface DeprecationsioClientInterface
 {
     /**
      * @param string $dsn

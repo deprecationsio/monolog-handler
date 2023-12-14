@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace DeprecationsIo\Monolog\Handler;
+namespace Deprecationsio\Monolog\Handler;
 
-use DeprecationsIo\Monolog\Client\CurlDeprecationsIoClient;
-use DeprecationsIo\Monolog\Client\DeprecationsIoClientInterface;
-use DeprecationsIo\Monolog\Context\Event;
-use DeprecationsIo\Monolog\Context\EventFactory;
+use Deprecationsio\Monolog\Client\CurlDeprecationsioClient;
+use Deprecationsio\Monolog\Client\DeprecationsioClientInterface;
+use Deprecationsio\Monolog\Context\Event;
+use Deprecationsio\Monolog\Context\EventFactory;
 
 abstract class AbstractMonologHandler
 {
@@ -22,10 +22,10 @@ abstract class AbstractMonologHandler
     private $dsn;
     private $eventFactory;
 
-    public function __construct($dsn, DeprecationsIoClientInterface $client = null)
+    public function __construct($dsn, DeprecationsioClientInterface $client = null)
     {
         $this->dsn = $dsn;
-        $this->client = $client ?: new CurlDeprecationsIoClient();
+        $this->client = $client ?: new CurlDeprecationsioClient();
     }
 
     /**

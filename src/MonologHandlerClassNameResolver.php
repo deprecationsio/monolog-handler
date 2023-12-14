@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace DeprecationsIo\Monolog;
+namespace Deprecationsio\Monolog;
 
 /**
  * Resolve the class name of the Monolog handler to use depending on the Monolog version.
@@ -26,7 +26,7 @@ class MonologHandlerClassNameResolver
             try {
                 $version = \Composer\InstalledVersions::getVersion('monolog/monolog');
 
-                return sprintf('DeprecationsIo\Monolog\Handler\MonologV%sHandler', $version[0]);
+                return sprintf('Deprecationsio\Monolog\Handler\MonologV%sHandler', $version[0]);
             } catch (\OutOfBoundsException $e) {
                 // Monolog is not installed
                 return null;
@@ -46,7 +46,7 @@ class MonologHandlerClassNameResolver
 
         foreach ($composerLock['packages'] as $package) {
             if ($package['name'] === 'monolog/monolog') {
-                return sprintf('DeprecationsIo\Monolog\Handler\MonologV%sHandler', $package['version'][0]);
+                return sprintf('Deprecationsio\Monolog\Handler\MonologV%sHandler', $package['version'][0]);
             }
         }
 

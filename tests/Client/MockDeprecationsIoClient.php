@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\DeprecationsIo\Monolog\Client;
+namespace Tests\Deprecationsio\Monolog\Client;
 
-use DeprecationsIo\Monolog\Client\DeprecationsIoClientInterface;
-use DeprecationsIo\Monolog\Context\Event;
+use Deprecationsio\Monolog\Client\DeprecationsIoClientInterface;
+use Deprecationsio\Monolog\Context\Event;
 
 class MockDeprecationsIoClient implements DeprecationsIoClientInterface
 {

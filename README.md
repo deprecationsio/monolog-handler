@@ -24,10 +24,10 @@ This library provides a Monolog handler for Monolog 1, 2 and 3.
 To use it manually, use the following code:
 
 ```php
-use DeprecationsIo\Monolog\Client\CurlDeprecationsIoClient;
-use DeprecationsIo\Monolog\Handler\MonologV1Handler;
-use DeprecationsIo\Monolog\Handler\MonologV2Handler;
-use DeprecationsIo\Monolog\Handler\MonologV3Handler;
+use Deprecationsio\Monolog\Client\CurlDeprecationsioClient;
+use Deprecationsio\Monolog\Handler\MonologV1Handler;
+use Deprecationsio\Monolog\Handler\MonologV2Handler;
+use Deprecationsio\Monolog\Handler\MonologV3Handler;
 use Monolog\Logger;
 
 $logger = new Logger('app', [
@@ -53,7 +53,7 @@ You can also use the provided class name resolver to load the handler dynamicall
 on the Monolog version you are using:
 
 ```php
-use DeprecationsIo\Monolog\MonologHandlerClassNameResolver;
+use Deprecationsio\Monolog\MonologHandlerClassNameResolver;
 
 $handlerName = MonologHandlerClassNameResolver::resolveHandlerClassName();
 

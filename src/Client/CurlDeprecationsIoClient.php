@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace DeprecationsIo\Monolog\Client;
+namespace Deprecationsio\Monolog\Client;
 
-use DeprecationsIo\Monolog\Context\Event;
+use Deprecationsio\Monolog\Context\Event;
 
-class CurlDeprecationsIoClient implements DeprecationsIoClientInterface
+class CurlDeprecationsioClient implements DeprecationsioClientInterface
 {
     public function sendEvent($dsn, Event $event)
     {

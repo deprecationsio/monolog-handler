@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace DeprecationsIo\Monolog\Handler;
+namespace Deprecationsio\Monolog\Handler;
 
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\HandlerInterface;

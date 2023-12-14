@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\DeprecationsIo\Monolog;
+namespace Tests\Deprecationsio\Monolog;
 
-use DeprecationsIo\Monolog\MonologHandlerClassNameResolver;
+use Deprecationsio\Monolog\MonologHandlerClassNameResolver;
 
 class MonologHandlerClassNameResolverTest extends UnitTest
 {
     public function testResolveClassName()
     {
         $this->assertSame(
-            'DeprecationsIo\Monolog\Handler\MonologV' . $this->getMonologVersion() . 'Handler',
+            'Deprecationsio\Monolog\Handler\MonologV' . $this->getMonologVersion() . 'Handler',
             MonologHandlerClassNameResolver::resolveHandlerClassName()
         );
     }

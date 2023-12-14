@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\DeprecationsIo\Monolog\Context;
+namespace Tests\Deprecationsio\Monolog\Context;
 
-use DeprecationsIo\Monolog\Context\EventFactory;
-use Tests\DeprecationsIo\Monolog\UnitTest;
+use Deprecationsio\Monolog\Context\EventFactory;
+use Tests\Deprecationsio\Monolog\UnitTest;
 
 class EventFactoryTest extends UnitTest
 {
@@ -65,7 +65,7 @@ class EventFactoryTest extends UnitTest
         $factory = new EventFactory();
         $event = $factory->createEvent($sapi);
 
-        $this->assertInstanceOf('DeprecationsIo\Monolog\Context\Event', $event);
+        $this->assertInstanceOf('Deprecationsio\Monolog\Context\Event', $event);
         $this->assertSame($expectedProjectDir, $event->getProjectDir());
         $this->assertSame($expectedPayload, $event->toArray());
     }
@@ -79,7 +79,7 @@ class EventFactoryTest extends UnitTest
         $factory = new EventFactory();
 
         $event = $factory->createEvent('cli');
-        $this->assertInstanceOf('DeprecationsIo\Monolog\Context\Event', $event);
+        $this->assertInstanceOf('Deprecationsio\Monolog\Context\Event', $event);
 
         $exception = $this->createDeprecationException();
         $event->addDeprecation(
@@ -99,6 +99,6 @@ class EventFactoryTest extends UnitTest
         $this->assertSame(27, $details['deprecations'][0]['line']);
 
         $traceLines = explode("\n", $details['deprecations'][0]['trace']);
-        $this->assertSame('tests/Context/EventFactoryTest.php	84	Tests\\DeprecationsIo\\Monolog\\UnitTest::createDeprecationException', $traceLines[0]);
+        $this->assertSame('tests/Context/EventFactoryTest.php	84	Tests\\Deprecationsio\\Monolog\\UnitTest::createDeprecationException', $traceLines[0]);
     }
 }
