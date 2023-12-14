@@ -13,7 +13,7 @@ namespace Tests\Deprecationsio\Monolog\Handler;
 
 use Deprecationsio\Monolog\Handler\MonologV3Handler;
 use Monolog\Logger;
-use Tests\Deprecationsio\Monolog\Client\MockDeprecationsIoClient;
+use Tests\Deprecationsio\Monolog\Client\MockDeprecationsioClient;
 use Tests\Deprecationsio\Monolog\UnitTest;
 
 class MonologV3HandlerTest extends UnitTest
@@ -24,7 +24,7 @@ class MonologV3HandlerTest extends UnitTest
             $this->markTestSkipped('Monolog v3 not installed.');
         }
 
-        $client = new MockDeprecationsIoClient();
+        $client = new MockDeprecationsioClient();
         $handler = new MonologV3Handler('https://ingest.deprecations.io/example?apikey=test', $client);
 
         $logger = new Logger('app', array($handler));
@@ -49,7 +49,7 @@ class MonologV3HandlerTest extends UnitTest
             $this->markTestSkipped('Monolog v3 not installed.');
         }
 
-        $client = new MockDeprecationsIoClient();
+        $client = new MockDeprecationsioClient();
         $handler = new MonologV3Handler('https://ingest.deprecations.io/example?apikey=test', $client);
 
         $logger = new Logger('app', array($handler));
@@ -78,7 +78,7 @@ class MonologV3HandlerTest extends UnitTest
             $this->markTestSkipped('Class ErrorException does not exists');
         }
 
-        $client = new MockDeprecationsIoClient();
+        $client = new MockDeprecationsioClient();
         $handler = new MonologV3Handler('https://ingest.deprecations.io/example?apikey=test', $client);
 
         $logger = new Logger('app', array($handler));
