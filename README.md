@@ -1,7 +1,7 @@
-# deprecations-io/monolog-handler
+# deprecationsio/monolog-handler
 
 deprecations-io/monolog-handler is a Monolog handler integrating 
-[deprecations.io](https://github.com/deprecations-io/deprecations.io)
+[deprecations.io](https://github.com/deprecationsio/deprecations.io)
 with Monolog applications.
 
 deprecations.io is a plug-and-play service to monitor and update your usages of deprecated features from your 
@@ -11,10 +11,10 @@ Keeping your code up-to-date was never this easy!
 
 ## Installation
 
-deprecations-io/monolog-handler requires PHP 5.3+. 
+deprecationsio/monolog-handler requires PHP 5.3+. 
 
 ```
-composer require deprecations-io/monolog-handler
+composer require deprecationsio/monolog-handler
 ```
 
 ## Usage
