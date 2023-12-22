@@ -1,6 +1,6 @@
 # deprecationsio/monolog-handler
 
-deprecations-io/monolog-handler is a Monolog handler integrating 
+deprecationsio/monolog-handler is a Monolog handler integrating 
 [deprecations.io](https://github.com/deprecationsio/deprecations.io)
 with Monolog applications.
 
