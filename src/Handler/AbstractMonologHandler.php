@@ -13,19 +13,38 @@ namespace Deprecationsio\Monolog\Handler;
 
 use Deprecationsio\Monolog\Client\CurlDeprecationsioClient;
 use Deprecationsio\Monolog\Client\DeprecationsioClientInterface;
+use Deprecationsio\Monolog\Context\DeprecationFactory;
 use Deprecationsio\Monolog\Context\Event;
 use Deprecationsio\Monolog\Context\EventFactory;
 
 abstract class AbstractMonologHandler
 {
-    private $client;
+    /**
+     * @var string
+     */
     private $dsn;
+
+    /**
+     * @var DeprecationsioClientInterface
+     */
+    private $client;
+
+    /**
+     * @var EventFactory
+     */
     private $eventFactory;
+
+    /**
+     * @var DeprecationFactory
+     */
+    private $deprecationFactory;
 
     public function __construct($dsn, DeprecationsioClientInterface $client = null)
     {
         $this->dsn = $dsn;
         $this->client = $client ?: new CurlDeprecationsioClient();
+        $this->eventFactory = new EventFactory();
+        $this->deprecationFactory = new DeprecationFactory();
     }
 
     /**
@@ -58,10 +77,6 @@ abstract class AbstractMonologHandler
 
     protected function sendEventForRecords(array $records)
     {
-        if (!$this->eventFactory) {
-            $this->eventFactory = new EventFactory();
-        }
-
         $event = $this->eventFactory->createEvent(PHP_SAPI);
 
         foreach ($records as $record) {
@@ -84,7 +99,8 @@ abstract class AbstractMonologHandler
     private function addRecordToEvent(Event $event, $record)
     {
         if (isset($record['context']['exception']) && $record['context']['exception'] instanceof \Exception) {
-            $event->addDeprecation(
+            $this->deprecationFactory->addDeprecationToEvent(
+                $event,
                 $record['context']['exception']->getMessage(),
                 $record['context']['exception']->getFile(),
                 $record['context']['exception']->getLine(),
@@ -101,7 +117,8 @@ abstract class AbstractMonologHandler
             $trace = $record['context']['trace'];
         }
 
-        $event->addDeprecation(
+        $this->deprecationFactory->addDeprecationToEvent(
+            $event,
             $record['message'],
             !empty($record['context']['file']) ? $record['context']['file'] : null,
             !empty($record['context']['line']) ? $record['context']['line'] : null,

@@ -11,6 +11,8 @@
 
 namespace Deprecationsio\Monolog;
 
+use Deprecationsio\Monolog\Composer\ComposerDataReader;
+
 /**
  * Resolve the class name of the Monolog handler to use depending on the Monolog version.
  */
@@ -21,36 +23,13 @@ class MonologHandlerClassNameResolver
      */
     public static function resolveHandlerClassName()
     {
-        // Composer v2
-        if (class_exists('Composer\InstalledVersions')) {
-            try {
-                $version = \Composer\InstalledVersions::getVersion('monolog/monolog');
+        $installedPackages = ComposerDataReader::getInstalledPackages();
 
-                return sprintf('Deprecationsio\Monolog\Handler\MonologV%sHandler', $version[0]);
-            } catch (\OutOfBoundsException $e) {
-                // Monolog is not installed
-                return null;
-            }
-        }
-
-        // Composer v1
-        $reflection = new \ReflectionClass('Composer\Autoload\ClassLoader');
-
-        $composerLockPath = dirname(dirname(dirname($reflection->getFileName()))) . '/composer.lock';
-        if (!file_exists($composerLockPath)) {
-            // Monolog is not installed
+        // Monolog is not installed
+        if (!isset($installedPackages['monolog/monolog'])) {
             return null;
         }
 
-        $composerLock = json_decode(file_get_contents($composerLockPath), true);
-
-        foreach ($composerLock['packages'] as $package) {
-            if ($package['name'] === 'monolog/monolog') {
-                return sprintf('Deprecationsio\Monolog\Handler\MonologV%sHandler', $package['version'][0]);
-            }
-        }
-
-        // Monolog is not installed
-        return null;
+        return sprintf('Deprecationsio\Monolog\Handler\MonologV%sHandler', $installedPackages['monolog/monolog'][0]);
     }
 }

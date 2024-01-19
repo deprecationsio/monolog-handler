@@ -43,7 +43,6 @@ $logger = new Logger('app', [
 
 // Log a deprecation
 // A deprecation must contain an exception that will be used by developers to understand the stacktrace
-// Only the exception message, file, line and stacktrace will be sent to deprecations.io
 $logger->notice('User Deprecated: ...', [
     'exception' => $this->createDeprecationException(),
 ]);

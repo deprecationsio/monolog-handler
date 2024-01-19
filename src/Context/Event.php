@@ -19,18 +19,65 @@ class Event
     private $projectDir;
 
     /**
+     * @var ?string
+     */
+    private $command;
+
+    /**
+     * @var ?string
+     */
+    private $httpMethod;
+
+    /**
+     * @var ?string
+     */
+    private $httpUrl;
+
+    /**
      * @var array
      */
-    private $payload;
+    private $packages;
+
+    /**
+     * @var array
+     */
+    private $deprecations;
 
     /**
      * @param string $projectDir
-     * @param array $payload
+     * @param ?string $command
+     * @param ?string $httpMethod
+     * @param ?string $httpUrl
+     * @param array $packages
      */
-    public function __construct($projectDir, $payload)
+    public function __construct($projectDir, $command, $httpMethod, $httpUrl, array $packages)
     {
         $this->projectDir = $projectDir;
-        $this->payload = $payload;
+        $this->command = $command;
+        $this->httpMethod = $httpMethod;
+        $this->httpUrl = $httpUrl;
+        $this->packages = $packages;
+        $this->deprecations = array();
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $payload = array(
+            'packages' => $this->packages,
+            'deprecations' => $this->deprecations,
+        );
+
+        if ($this->command) {
+            $payload['command'] = $this->command;
+        } else {
+            $payload['method'] = $this->httpMethod;
+            $payload['url'] = $this->httpUrl;
+        }
+
+        return $payload;
     }
 
     /**
@@ -42,19 +89,11 @@ class Event
     }
 
     /**
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->payload;
-    }
-
-    /**
      * @return bool
      */
     public function hasDeprecations()
     {
-        return !empty($this->payload['deprecations']);
+        return !empty($this->deprecations);
     }
 
     /**
@@ -66,7 +105,7 @@ class Event
      */
     public function addDeprecation($message, $file, $line, $trace)
     {
-        $this->payload['deprecations'][] = array(
+        $this->deprecations[] = array(
             'message' => $message,
             'file' => $file ? $this->normalizePath($file) : null,
             'line' => $line,
@@ -82,7 +121,11 @@ class Event
     private function normalizePath($path)
     {
         if (0 === strpos($path, $this->projectDir)) {
-            return ltrim(substr($path, strlen($this->projectDir)), '/\\');
+            $path = substr($path, strlen($this->projectDir));
+        }
+
+        if (DIRECTORY_SEPARATOR !== '/') {
+            $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
         }
 
         return ltrim($path, '/\\');

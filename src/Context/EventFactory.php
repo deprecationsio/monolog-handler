@@ -11,9 +11,11 @@
 
 namespace Deprecationsio\Monolog\Context;
 
+use Deprecationsio\Monolog\Composer\ComposerDataReader;
+
 class EventFactory
 {
-    private $cache;
+    private $context;
 
     /**
      * @param string $sapi
@@ -22,33 +24,33 @@ class EventFactory
      */
     public function createEvent($sapi)
     {
-        if (!$this->cache) {
-            $this->cache = $this->createContextCache($sapi);
+        if (!$this->context) {
+            $this->context = $this->createContext($sapi);
         }
 
-        return new Event($this->cache['projectDir'], $this->cache['context']);
+        return new Event(
+            $this->context['projectDir'],
+            $this->context['command'],
+            $this->context['method'],
+            $this->context['url'],
+            $this->context['packages']
+        );
     }
 
     /**
      * @param string $sapi
-     *
      * @return array
      */
-    private function createContextCache($sapi)
+    private function createContext($sapi)
     {
-        // Project dir
-        if (class_exists('Composer\InstalledVersions')) {
-            // Composer v2
-            $rootPackage = \Composer\InstalledVersions::getRootPackage();
-            $projectDir = realpath($rootPackage['install_path']);
-        } else {
-            // Composer v1
-            $reflection = new \ReflectionClass('Composer\Autoload\ClassLoader');
-            $projectDir = dirname(dirname(dirname($reflection->getFileName())));
-        }
+        $context = array(
+            'projectDir' => ComposerDataReader::getProjectDir(),
+            'packages' => ComposerDataReader::getInstalledPackages(),
+            'command' => null,
+            'method' => null,
+            'url' => null,
+        );
 
-        // Context
-        $context = array();
         if ('cli' === $sapi) {
             $context['command'] = implode(' ', !empty($_SERVER['argv']) ? $_SERVER['argv'] : array());
         } else {
@@ -56,10 +58,7 @@ class EventFactory
             $context['url'] = $this->getRequestUrl();
         }
 
-        return array(
-            'projectDir' => $projectDir,
-            'context' => $context,
-        );
+        return $context;
     }
 
     /**
