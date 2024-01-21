@@ -32,13 +32,32 @@ class DeprecationFactory
                 || preg_match('/.*(?:Class|Interface|Trait) "(.+)" should implement method.*/U', $message, $m)
             )
         ) {
-            if (class_exists($m[1])) {
-                $reflection = new \ReflectionClass($m[1]);
-                $file = $reflection->getFileName() ? (string) $reflection->getFileName() : $file;
-                $line = $reflection->getStartLine() ? (int) $reflection->getStartLine() : $line;
-            }
+            list($file, $line) = $this->resolveRealTriggeringFile($m[1], $file, $line);
+        }
+
+        // Handle Symfony services definitions
+        if (preg_match('/.*The "(?:.+)" (?:service|service alias) is deprecated.*It is being referenced by the "(.+)" service./U', $message, $m)) {
+            list($file, $line) = $this->resolveRealTriggeringFile($m[1], $file, $line);
         }
 
         $event->addDeprecation($message, $file, $line, $trace);
+    }
+
+    /**
+     * @param string $className
+     * @return array
+     */
+    private function resolveRealTriggeringFile($className, $file, $line)
+    {
+        if (!class_exists($className)) {
+            return array('~project~', 0);
+        }
+
+        $reflection = new \ReflectionClass($className);
+
+        return array(
+            $reflection->getFileName() ? (string) $reflection->getFileName() : $file,
+            $reflection->getStartLine() ? (int) $reflection->getStartLine() : $line
+        );
     }
 }

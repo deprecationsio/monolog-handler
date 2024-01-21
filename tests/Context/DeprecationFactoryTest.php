@@ -21,6 +21,13 @@ class DeprecationFactoryTest extends UnitTest
     {
         return array(
             array(
+                'message' => 'Example.',
+                'file' => 'vendor/symfony/any/file.php',
+                'line' => 10,
+                'expectedFile' => 'vendor/symfony/any/file.php',
+                'expectedLine' => 10,
+            ),
+            array(
                 'message' => 'The "Tests\Deprecationsio\Monolog\Mock\MockClass" class implements "Example" that is deprecated since Symfony 6.2, use the {@see AsMessageHandler} attribute instead.',
                 'file' => 'vendor/symfony/error-handler/DebugClassLoader.php',
                 'line' => 10,
@@ -73,8 +80,8 @@ class DeprecationFactoryTest extends UnitTest
                 'message' => 'The "Invalid\MockClass" class implements "Symfony\Component\Messenger\Handler\MessageHandlerInterface" that is deprecated since Symfony 6.2, use the {@see AsMessageHandler} attribute instead.',
                 'file' => 'vendor/symfony/error-handler/DebugClassLoader.php',
                 'line' => 10,
-                'expectedFile' => 'vendor/symfony/error-handler/DebugClassLoader.php',
-                'expectedLine' => 10,
+                'expectedFile' => '~project~',
+                'expectedLine' => 0,
             ),
             array(
                 'message' => 'User Deprecated: The "Tests\Deprecationsio\Monolog\Mock\MockClass" class implements "Doctrine\DBAL\Driver\ServerInfoAwareConnection" that is deprecated The methods defined in this interface will be made part of the {@see Driver} interface in the next major release.',
@@ -82,6 +89,20 @@ class DeprecationFactoryTest extends UnitTest
                 'line' => 10,
                 'expectedFile' => 'tests/Mock/MockClass.php',
                 'expectedLine' => 14,
+            ),
+            array(
+                'message' => 'Since symfony/security-bundle 6.2: The "Symfony\Component\Security\Core\Security" service alias is deprecated, use "Symfony\Bundle\SecurityBundle\Security" instead. It is being referenced by the "Tests\Deprecationsio\Monolog\Mock\MockClass" service.',
+                'file' => 'vendor/symfony/error-handler/DebugClassLoader.php',
+                'line' => 10,
+                'expectedFile' => 'tests/Mock/MockClass.php',
+                'expectedLine' => 14,
+            ),
+            array(
+                'message' => 'Since symfony/security-bundle 6.2: The "Symfony\Component\Security\Core\Security" service alias is deprecated, use "Symfony\Bundle\SecurityBundle\Security" instead. It is being referenced by the "app.example_service" service.',
+                'file' => 'vendor/symfony/error-handler/DebugClassLoader.php',
+                'line' => 10,
+                'expectedFile' => '~project~',
+                'expectedLine' => 0,
             ),
         );
     }
