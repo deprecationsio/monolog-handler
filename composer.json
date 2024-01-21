@@ -27,6 +27,10 @@
     "require-dev": {
         "phpunit/phpunit": "9.*"
     },
+    "scripts": {
+        "rmt-install": "echo 'Installing liip/rmt in /tools' && mkdir -p tools/rmt && composer require --working-dir=tools/rmt liip/rmt:1.7.4",
+        "release": "tools/rmt/vendor/bin/RMT release"
+    },
     "config": {
         "preferred-install": {
             "*": "dist"
