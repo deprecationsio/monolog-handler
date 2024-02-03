@@ -98,7 +98,8 @@ class EventFactoryTest extends UnitTest
             $exception->getMessage(),
             $exception->getFile(),
             $exception->getLine(),
-            $exception->getTrace()
+            $exception->getTrace(),
+            array()
         );
 
         $details = $event->toArray();
