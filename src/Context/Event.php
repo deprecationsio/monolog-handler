@@ -101,15 +101,17 @@ class Event
      * @param string $file
      * @param int $line
      * @param array $trace
+     * @param array $context
      * @return void
      */
-    public function addDeprecation($message, $file, $line, $trace)
+    public function addDeprecation($message, $file, $line, $trace, $context)
     {
         $this->deprecations[] = array(
             'message' => $message,
             'file' => $file ? $this->normalizePath($file) : null,
             'line' => $line,
             'trace' => $trace ? $this->normalizeTrace($trace) : array(),
+            'context' => $context ?: array(),
         );
     }
 

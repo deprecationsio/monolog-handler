@@ -40,7 +40,21 @@ class DeprecationFactory
             list($file, $line) = $this->resolveRealTriggeringFile($m[1], $file, $line);
         }
 
-        $event->addDeprecation($message, $file, $line, $trace);
+        // Add context
+        $context = array();
+        if ($file && is_file($file)) {
+            $code = new \SplFileObject($file);
+            for ($i = $line - 3; $i <= $line + 3; ++$i) {
+                if ($line < 0) {
+                    continue;
+                }
+
+                $code->seek($i);
+                $context[$i + 1] = trim($code->current());
+            }
+        }
+
+        $event->addDeprecation($message, $file, $line, $trace, array_filter($context));
     }
 
     /**
@@ -49,8 +63,11 @@ class DeprecationFactory
      */
     private function resolveRealTriggeringFile($className, $file, $line)
     {
+        $parts = explode('::', $className);
+        $className = $parts[0];
+
         if (!class_exists($className)) {
-            return array('~project~', 0);
+            return array($file, $line);
         }
 
         $reflection = new \ReflectionClass($className);
